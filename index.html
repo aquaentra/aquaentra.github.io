@@ -166,7 +166,11 @@ footer{
 </div>
 
 <script>
-// FOTO YÜKLE
+<script>
+// ===== AYAR =====
+const ADMIN_USER = "admin"; // admin kullanıcı adı
+
+// ===== FOTO YÜKLE =====
 function uploadPhoto(){
   const user = localStorage.getItem("loggedUser");
   if(!user){
@@ -180,22 +184,37 @@ function uploadPhoto(){
 
   const reader = new FileReader();
   reader.onload = function(e){
-    addToGallery(e.target.result);
+    savePendingPhoto(e.target.result, user);
+    alert("Foto admin onayına gönderildi");
   };
   reader.readAsDataURL(file);
 }
 
-// GALERİYE EKLE
-function addToGallery(src){
+// ===== BEKLEYENLERE KAYDET =====
+function savePendingPhoto(src, user){
+  const pending = JSON.parse(localStorage.getItem("pendingPhotos") || "[]");
+
+  pending.push({
+    id: Date.now(),
+    src: src,
+    user: user,
+    likes: 0
+  });
+
+  localStorage.setItem("pendingPhotos", JSON.stringify(pending));
+}
+
+// ===== GALERİYE EKLE =====
+function addToGallery(photo){
   const gallery = document.getElementById("gallery");
 
   const card = document.createElement("div");
   card.className = "card";
 
   card.innerHTML = `
-    <img src="${src}">
+    <img src="${photo.src}">
     <div class="actions">
-      <button class="like-btn" onclick="like(this)">❤️ 0</button>
+      <button class="like-btn" onclick="like(this)">❤️ ${photo.likes}</button>
     </div>
     <input class="comment-box" placeholder="Yorum yaz...">
   `;
@@ -203,14 +222,14 @@ function addToGallery(src){
   gallery.prepend(card);
 }
 
-// LIKE
+// ===== LIKE =====
 function like(btn){
   let count = parseInt(btn.innerText.split(" ")[1]);
   count++;
   btn.innerText = "❤️ " + count;
 }
 
-// AUTH SYSTEM
+// ===== AUTH =====
 let authMode = "login";
 
 function showLogin(){
@@ -244,6 +263,8 @@ function authAction(){
       localStorage.setItem("loggedUser", user);
       updateNavbar();
       closeAuth();
+      loadApprovedPhotos();
+      loadAdminPanel();
     }else{
       alert("Hatalı giriş");
     }
@@ -267,8 +288,75 @@ function logout(){
   location.reload();
 }
 
-// SAYFA AÇILINCA
+// ===== ONAYLANANLARI YÜKLE =====
+function loadApprovedPhotos(){
+  const approved = JSON.parse(localStorage.getItem("approvedPhotos") || "[]");
+  document.getElementById("gallery").innerHTML = "";
+  approved.forEach(addToGallery);
+}
+
+// ===== ADMIN PANEL =====
+function loadAdminPanel(){
+  const user = localStorage.getItem("loggedUser");
+  if(user !== ADMIN_USER) return;
+
+  const container = document.querySelector(".container");
+
+  const panel = document.createElement("div");
+  panel.innerHTML = `
+    <h2 style="margin-top:40px;">🛡️ Admin Onay Paneli</h2>
+    <div id="adminPending" class="gallery"></div>
+  `;
+
+  container.appendChild(panel);
+
+  renderPending();
+}
+
+function renderPending(){
+  const pending = JSON.parse(localStorage.getItem("pendingPhotos") || "[]");
+  const area = document.getElementById("adminPending");
+  if(!area) return;
+
+  area.innerHTML = "";
+
+  pending.forEach(photo=>{
+    const card = document.createElement("div");
+    card.className = "card";
+
+    card.innerHTML = `
+      <img src="${photo.src}">
+      <button class="nav-btn" style="margin-top:8px;" onclick="approvePhoto(${photo.id})">Onayla</button>
+    `;
+
+    area.appendChild(card);
+  });
+}
+
+// ===== ONAYLA =====
+function approvePhoto(id){
+  let pending = JSON.parse(localStorage.getItem("pendingPhotos") || "[]");
+  let approved = JSON.parse(localStorage.getItem("approvedPhotos") || "[]");
+
+  const photo = pending.find(p => p.id === id);
+  if(!photo) return;
+
+  approved.push(photo);
+  pending = pending.filter(p => p.id !== id);
+
+  localStorage.setItem("pendingPhotos", JSON.stringify(pending));
+  localStorage.setItem("approvedPhotos", JSON.stringify(approved));
+
+  renderPending();
+  loadApprovedPhotos();
+}
+
+// ===== SAYFA AÇILIŞ =====
 updateNavbar();
+loadApprovedPhotos();
+loadAdminPanel();
+</script>
+
 </script>
 
 </body>
