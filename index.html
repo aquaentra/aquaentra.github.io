@@ -20,17 +20,30 @@ body{
   top:0;
   background:#111;
   color:white;
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  padding:14px 24px;
+  padding:18px 24px 12px;
   box-shadow:0 2px 10px rgba(0,0,0,0.4);
   z-index:999;
 }
 
-.nav-left{display:flex;align-items:center;gap:10px;}
-.logo{width:42px;}
-.brand{font-size:20px;font-weight:bold;}
+.nav-top{
+  display:flex;
+  justify-content:flex-end;
+}
+
+.nav-center{
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  gap:14px;
+  margin-top:6px;
+}
+
+.logo{width:60px;}
+
+.brand{
+  font-size:28px;
+  font-weight:bold;
+}
 
 .nav-right{display:flex;gap:10px;}
 
@@ -54,8 +67,16 @@ body{
   margin-top:20px;
 }
 
-.card{background:#1a1a1a;padding:12px;border-radius:12px;}
-.card img{width:100%;border-radius:10px;}
+.card{
+  background:#1a1a1a;
+  padding:12px;
+  border-radius:12px;
+}
+
+.card img{
+  width:100%;
+  border-radius:10px;
+}
 
 .actions{
   display:flex;
@@ -93,15 +114,19 @@ footer{
 
 <!-- NAVBAR -->
 <header class="navbar">
-  <div class="nav-left">
+
+  <div class="nav-top">
+    <div class="nav-right" id="navUserArea">
+      <button class="nav-btn" onclick="showLogin()">Giriş</button>
+      <button class="nav-btn" onclick="showRegister()">Kayıt</button>
+    </div>
+  </div>
+
+  <div class="nav-center">
     <img src="logo.png" class="logo">
     <span class="brand">Aquaentra Gallery</span>
   </div>
 
-  <div class="nav-right" id="navUserArea">
-    <button class="nav-btn" onclick="showLogin()">Giriş</button>
-    <button class="nav-btn" onclick="showRegister()">Kayıt</button>
-  </div>
 </header>
 
 <!-- ANA İÇERİK -->
@@ -148,25 +173,29 @@ function uploadPhoto(){
 
   const reader = new FileReader();
   reader.onload = function(e){
+
     const img = new Image();
     img.onload = function(){
       const canvas = document.createElement("canvas");
-      const maxWidth = 800;
-      const scale = maxWidth / img.width;
 
-      canvas.width = maxWidth;
+      const maxWidth = 800;
+      const scale = Math.min(1, maxWidth / img.width);
+
+      canvas.width = img.width * scale;
       canvas.height = img.height * scale;
 
       const ctx = canvas.getContext("2d");
-      ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+      ctx.drawImage(img,0,0,canvas.width,canvas.height);
 
-      const compressed = canvas.toDataURL("image/jpeg", 0.7);
+      const compressed = canvas.toDataURL("image/jpeg",0.7);
 
-      savePendingPhoto(compressed, user);
+      savePendingPhoto(compressed,user);
       alert("Foto admin onayına gönderildi");
     };
+
     img.src = e.target.result;
   };
+
   reader.readAsDataURL(file);
 }
 
@@ -202,23 +231,23 @@ let authMode="login";
 
 function showLogin(){
   authMode="login";
-  document.getElementById("authTitle").innerText="Giriş";
-  document.getElementById("authModal").style.display="flex";
+  authTitle.innerText="Giriş";
+  authModal.style.display="flex";
 }
 
 function showRegister(){
   authMode="register";
-  document.getElementById("authTitle").innerText="Kayıt";
-  document.getElementById("authModal").style.display="flex";
+  authTitle.innerText="Kayıt";
+  authModal.style.display="flex";
 }
 
 function closeAuth(){
-  document.getElementById("authModal").style.display="none";
+  authModal.style.display="none";
 }
 
 function authAction(){
-  const user=document.getElementById("authUser").value;
-  const pass=document.getElementById("authPass").value;
+  const user=authUser.value;
+  const pass=authPass.value;
   if(!user||!pass) return alert("Boş bırakma");
 
   if(authMode==="register"){
@@ -275,19 +304,15 @@ function renderPending(){
   const pending=JSON.parse(localStorage.getItem("pendingPhotos")||"[]");
   const area=document.getElementById("adminPending");
   if(!area) return;
-
   area.innerHTML="";
 
-  pending.forEach(p=>{
+  pending.forEach(photo=>{
     const card=document.createElement("div");
     card.className="card";
-
     card.innerHTML=`
-      <img src="${p.src}">
-      <button class="nav-btn" style="margin-top:8px;" onclick="approvePhoto(${p.id})">Onayla</button>
-      <button class="nav-btn" style="margin-top:6px;background:#ef4444;" onclick="rejectPhoto(${p.id})">Reddet</button>
-    `;
-
+      <img src="${photo.src}">
+      <button class="nav-btn" style="margin-top:8px;" onclick="approvePhoto(${photo.id})">Onayla</button>
+      <button class="nav-btn" style="margin-top:6px;background:#ef4444;" onclick="rejectPhoto(${photo.id})">Reddet</button>`;
     area.appendChild(card);
   });
 }
@@ -299,7 +324,7 @@ function approvePhoto(id){
   const photo=pending.find(p=>p.id===id);
   if(!photo) return;
 
-  approved.unshift(photo);
+  approved.push(photo);
   pending=pending.filter(p=>p.id!==id);
 
   localStorage.setItem("pendingPhotos",JSON.stringify(pending));
@@ -317,10 +342,11 @@ function rejectPhoto(id){
 }
 
 // ===== SAYFA AÇILIŞ =====
-document.getElementById("uploadBtn").addEventListener("click", uploadPhoto);
 updateNavbar();
 loadApprovedPhotos();
 loadAdminPanel();
+
+document.getElementById("uploadBtn").addEventListener("click",uploadPhoto);
 </script>
 
 </body>
