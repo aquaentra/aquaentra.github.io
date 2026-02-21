@@ -1,107 +1,129 @@
 <!DOCTYPE html>
 <html lang="tr">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Komutan Fotoğraf Galerisi</title>
-  <meta name="description" content="Akvaryum ve doğa fotoğraflarım" />
-  <style>
-    body {
-      margin: 0;
-      font-family: Arial, Helvetica, sans-serif;
-      background: #0f172a;
-      color: #e5e7eb;
-    }
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Aquaentra Gallery</title>
 
-    header {
-      text-align: center;
-      padding: 40px 20px;
-      background: linear-gradient(135deg, #0ea5e9, #22c55e);
-      color: white;
-    }
+<style>
+*{
+  box-sizing:border-box;
+  margin:0;
+  padding:0;
+}
 
-    header h1 {
-      margin: 0;
-      font-size: 2.2rem;
-    }
+body{
+  font-family: system-ui, Arial;
+  background:#0b1220;
+  color:#e5e7eb;
+}
 
-    header p {
-      margin-top: 10px;
-      opacity: 0.9;
-    }
+/* HEADER */
+header{
+  background: linear-gradient(135deg,#06b6d4,#22c55e);
+  padding:60px 20px;
+  text-align:center;
+}
 
-    .gallery {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-      gap: 16px;
-      padding: 20px;
-      max-width: 1200px;
-      margin: auto;
-    }
+header h1{
+  font-size:2.6rem;
+  margin-bottom:10px;
+}
 
-    .card {
-      background: #111827;
-      border-radius: 16px;
-      overflow: hidden;
-      box-shadow: 0 10px 25px rgba(0,0,0,0.4);
-      transition: transform 0.25s ease;
-    }
+header p{
+  opacity:.9;
+}
 
-    .card:hover {
-      transform: scale(1.03);
-    }
+/* CONTAINER */
+.container{
+  max-width:1200px;
+  margin:auto;
+  padding:40px 20px;
+}
 
-    .card img {
-      width: 100%;
-      height: 220px;
-      object-fit: cover;
-      display: block;
-    }
+/* GALLERY */
+.gallery{
+  display:grid;
+  grid-template-columns: repeat(auto-fit,minmax(280px,1fr));
+  gap:24px;
+}
 
-    .card p {
-      padding: 12px;
-      margin: 0;
-      font-size: 0.9rem;
-      text-align: center;
-    }
+.card{
+  background:#111827;
+  border-radius:18px;
+  overflow:hidden;
+  transition:.25s ease;
+  border:1px solid rgba(255,255,255,.06);
+}
 
-    footer {
-      text-align: center;
-      padding: 30px 10px;
-      opacity: 0.7;
-      font-size: 0.85rem;
-    }
-  </style>
+.card:hover{
+  transform:translateY(-6px) scale(1.02);
+  box-shadow:0 25px 50px rgba(0,0,0,.5);
+}
+
+.card img{
+  width:100%;
+  height:240px;
+  object-fit:cover;
+  display:block;
+}
+
+.card-content{
+  padding:14px;
+}
+
+.card-content p{
+  font-size:.95rem;
+  opacity:.9;
+}
+
+/* FOOTER */
+footer{
+  text-align:center;
+  padding:40px 20px;
+  opacity:.6;
+  font-size:.85rem;
+}
+</style>
 </head>
+
 <body>
 
-  <header>
-    <h1>📸 Komutan Galeri</h1>
-    <p>Akvaryum ve su altı fotoğraflarım</p>
-  </header>
+<header>
+  <h1>📸 Aquaentra Gallery</h1>
+  <p>Pet Gallery</p>
+</header>
 
-  <section class="gallery">
+<div class="container">
+  <div class="gallery">
 
     <div class="card">
-      <img src="https://picsum.photos/600/400?random=1" alt="Akvaryum fotoğrafı" />
-      <p>Fotoğraf açıklaması</p>
+      <img src="https://picsum.photos/600/400?random=1">
+      <div class="card-content">
+        <p>Fotoğraf açıklaması</p>
+      </div>
     </div>
 
     <div class="card">
-      <img src="https://picsum.photos/600/400?random=2" alt="Deniz canlısı" />
-      <p>Fotoğraf açıklaması</p>
+      <img src="https://picsum.photos/600/400?random=2">
+      <div class="card-content">
+        <p>Fotoğraf açıklaması</p>
+      </div>
     </div>
 
     <div class="card">
-      <img src="https://picsum.photos/600/400?random=3" alt="Resif akvaryumu" />
-      <p>Fotoğraf açıklaması</p>
+      <img src="https://picsum.photos/600/400?random=3">
+      <div class="card-content">
+        <p>Fotoğraf açıklaması</p>
+      </div>
     </div>
 
-  </section>
+  </div>
+</div>
 
-  <footer>
-    © 2026 Komutan Fotoğraf Galerisi
-  </footer>
+<footer>
+  © 2026 Komutan Galeri
+</footer>
 
 </body>
 </html>
