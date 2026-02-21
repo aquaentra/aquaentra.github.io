@@ -121,21 +121,20 @@ footer{
 
 <body>
 
-<!-- ✅ NAVBAR -->
+<!-- NAVBAR -->
 <header class="navbar">
   <div class="nav-left">
     <img src="logo.png" class="logo">
-    <span class="brand">Aquaentra</span>
+    <span class="brand">Aquaentra Gallery</span>
   </div>
 
-<div class="nav-right" id="navUserArea">
-  <button class="nav-btn" onclick="showLogin()">Giriş</button>
-  <button class="nav-btn" onclick="showRegister()">Kayıt</button>
-</div>
-
+  <div class="nav-right" id="navUserArea">
+    <button class="nav-btn" onclick="showLogin()">Giriş</button>
+    <button class="nav-btn" onclick="showRegister()">Kayıt</button>
+  </div>
 </header>
 
-<!-- ✅ ANA İÇERİK -->
+<!-- ANA İÇERİK -->
 <div class="container">
 
   <h2>Fotoğraf Yükle</h2>
@@ -152,6 +151,7 @@ footer{
 <footer>
   © Aquaentra
 </footer>
+
 <!-- AUTH MODAL -->
 <div id="authModal" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,.6); align-items:center; justify-content:center;">
   <div style="background:#111; padding:24px; border-radius:12px; width:300px;">
@@ -166,7 +166,14 @@ footer{
 </div>
 
 <script>
+// FOTO YÜKLE
 function uploadPhoto(){
+  const user = localStorage.getItem("loggedUser");
+  if(!user){
+    alert("Önce giriş yap");
+    return;
+  }
+
   const input = document.getElementById("uploadInput");
   const file = input.files[0];
   if(!file) return;
@@ -178,6 +185,7 @@ function uploadPhoto(){
   reader.readAsDataURL(file);
 }
 
+// GALERİYE EKLE
 function addToGallery(src){
   const gallery = document.getElementById("gallery");
 
@@ -195,12 +203,14 @@ function addToGallery(src){
   gallery.prepend(card);
 }
 
+// LIKE
 function like(btn){
   let count = parseInt(btn.innerText.split(" ")[1]);
   count++;
   btn.innerText = "❤️ " + count;
 }
-  <script>
+
+// AUTH SYSTEM
 let authMode = "login";
 
 function showLogin(){
@@ -257,10 +267,8 @@ function logout(){
   location.reload();
 }
 
-// sayfa açılınca kontrol
+// SAYFA AÇILINCA
 updateNavbar();
-</script>
-
 </script>
 
 </body>
