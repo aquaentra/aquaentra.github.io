@@ -1,343 +1,183 @@
 <!DOCTYPE html>
 <html lang="tr">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Aquaentra Gallery</title>
+<meta charset="UTF-8">
+<title>Üye Paneli</title>
 
 <style>
-*{box-sizing:border-box;margin:0;padding:0;}
-
-body{
-  font-family:system-ui,Arial;
-  background:#0b1220;
-  color:#e5e7eb;
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    background: #f5f5f5;
 }
 
-/* NAVBAR */
-.navbar{
-  position:sticky;
-  top:0;
-  background:#111;
-  padding:10px 24px;
-  box-shadow:0 2px 10px rgba(0,0,0,0.4);
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
+/* ÜST BAR */
+.top-left {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    font-size: 22px;
+    font-weight: bold;
 }
 
-.nav-left{
-  display:flex;
-  align-items:center;
-  gap:10px;
+/* ANA SAYFAYA DÖN */
+.home-btn {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    padding: 8px 14px;
+    background: #007bff;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
 }
 
-.logo{width:44px;}
-.brand{font-size:22px;font-weight:700;}
-
-.nav-right{display:flex;gap:10px;}
-
-.nav-btn{
-  background:#00bcd4;
-  border:none;
-  padding:8px 14px;
-  border-radius:8px;
-  cursor:pointer;
-  font-weight:600;
-  color:#000;
+.home-btn:hover {
+    background: #0056b3;
 }
 
-/* CONTAINER */
-.container{
-  max-width:1100px;
-  margin:auto;
-  padding:40px 20px;
+/* PANEL */
+.panel {
+    max-width: 900px;
+    margin: 80px auto;
+    background: white;
+    padding: 30px;
+    border-radius: 12px;
 }
 
-/* PROFILE */
-.profile-box{
-  text-align:center;
-  margin-bottom:30px;
+/* ORTA ÜST */
+.profile-top {
+    text-align: center;
 }
 
-.profile-logo{
-  width:120px;
-  height:120px;
-  border-radius:50%;
-  object-fit:cover;
-  border:3px solid #00bcd4;
+/* LOGO */
+.logo-img {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 3px solid #ddd;
 }
 
-.bio{
-  margin-top:10px;
-  width:300px;
-  max-width:90%;
-  padding:8px;
-  border-radius:8px;
-  border:none;
+/* KULLANICI ADI */
+.username {
+    font-size: 22px;
+    font-weight: bold;
+    margin-top: 10px;
 }
 
-/* DIVIDER */
-.divider{
-  margin:30px 0 20px;
-  border-top:1px solid #334155;
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  padding-top:14px;
+/* BIO */
+.bio {
+    width: 100%;
+    margin-top: 10px;
+    padding: 8px;
 }
 
-/* GALLERY */
-.gallery{
-  display:grid;
-  grid-template-columns:repeat(auto-fill,minmax(220px,1fr));
-  gap:20px;
+/* ÇİZGİ */
+.divider {
+    display: flex;
+    align-items: center;
+    margin: 25px 0;
 }
 
-.card{
-  background:#1a1a1a;
-  padding:12px;
-  border-radius:12px;
+.line {
+    flex: 1;
+    height: 1px;
+    background: #ccc;
 }
 
-.card img{
-  width:100%;
-  border-radius:10px;
+.upload-text {
+    margin-left: 10px;
+    font-weight: bold;
+    cursor: pointer;
+    color: #007bff;
 }
 
-footer{
-  text-align:center;
-  padding:40px 20px;
-  opacity:.6;
+/* GALERİ */
+.gallery {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: 10px;
+}
+
+.gallery img {
+    width: 100%;
+    border-radius: 8px;
 }
 </style>
 </head>
 
 <body>
 
-<header class="navbar">
-  <div class="nav-left">
-    <img src="logo.png" class="logo">
-    <span class="brand">Aquaentra Gallery</span>
-  </div>
+<!-- SOL ÜST -->
+<div class="top-left">Aquaentra Gallery</div>
 
-  <div class="nav-right" id="navUserArea">
-    <button class="nav-btn" onclick="showLogin()">Giriş</button>
-    <button class="nav-btn" onclick="showRegister()">Kayıt</button>
-  </div>
-</header>
+<!-- ANA SAYFAYA DÖN -->
+<button class="home-btn" onclick="goHome()">Ana Sayfaya Dön</button>
 
-<div class="container">
+<div class="panel">
 
-  <!-- ANA SAYFA -->
-  <div id="homePage">
-    <h2>Galeri</h2>
-    <div id="gallery" class="gallery"></div>
-  </div>
+    <div class="profile-top">
 
-  <!-- ÜYE PANELİ -->
-  <div id="memberPage" style="display:none;">
+        <!-- LOGO -->
+        <label for="logoInput">
+            <img id="logoPreview" class="logo-img"
+                 src="https://via.placeholder.com/120">
+        </label>
+        <input type="file" id="logoInput" hidden>
 
-    <div class="profile-box">
-      <img id="profileLogo" class="profile-logo" src="https://via.placeholder.com/120">
+        <!-- KULLANICI ADI -->
+        <div class="username">kullanici_adi</div>
 
-      <div style="margin-top:10px;">
-        <input type="file" id="logoInput" accept="image/*">
-        <button class="nav-btn" onclick="changeLogo()">Logo Değiştir</button>
-      </div>
-
-      <h2 id="profileName" style="margin-top:14px;"></h2>
-
-      <textarea id="bioInput" class="bio" placeholder="Biyografi yaz..."></textarea><br>
-      <button class="nav-btn" style="margin-top:8px;" onclick="saveBio()">Biyografiyi Kaydet</button>
+        <!-- BIO -->
+        <textarea class="bio" placeholder="Biyografinizi yazın..."></textarea>
     </div>
 
+    <!-- ÇİZGİ + FOTO YÜKLE -->
     <div class="divider">
-      <h3>Fotoğraf Yükle</h3>
-      <div>
-        <input type="file" id="uploadInput" accept="image/*">
-        <button class="nav-btn" onclick="uploadPhoto()">Yükle</button>
-      </div>
+        <div class="line"></div>
+        <label class="upload-text" for="photoInput">Fotoğraf Yükle</label>
+        <input type="file" id="photoInput" hidden multiple>
     </div>
 
-    <div id="myPhotos" class="gallery"></div>
-
-  </div>
+    <!-- GALERİ -->
+    <div class="gallery" id="gallery"></div>
 
 </div>
 
-<footer>© Aquaentra</footer>
-
 <script>
-const ADMIN_USER="admin";
-
-/* NAVBAR */
-function updateNavbar(){
-  const user=localStorage.getItem("loggedUser");
-
-  if(user){
-    navUserArea.innerHTML=`
-      <button class="nav-btn" onclick="openMember()">Üye Paneli</button>
-      <span>👤 ${user}</span>
-      <button class="nav-btn" onclick="logout()">Çıkış</button>
-    `;
-  }
+// ANA SAYFA BUTONU
+function goHome() {
+    window.location.href = "index.html"; // ana sayfanın dosya adı
 }
 
-/* SAYFA */
-function openMember(){
-  homePage.style.display="none";
-  memberPage.style.display="block";
+// LOGO DEĞİŞTİR
+document.getElementById("logoInput").addEventListener("change", function(e) {
+    const file = e.target.files[0];
+    if (!file) return;
 
-  const user=localStorage.getItem("loggedUser");
-  profileName.innerText=user;
-
-  loadProfile();
-  loadMyPhotos();
-}
-
-function openHome(){
-  homePage.style.display="block";
-  memberPage.style.display="none";
-}
-
-/* PROFİL */
-function loadProfile(){
-  const user=localStorage.getItem("loggedUser");
-
-  const logo=localStorage.getItem("logo_"+user);
-  const bio=localStorage.getItem("bio_"+user);
-
-  if(logo) profileLogo.src=logo;
-  if(bio) bioInput.value=bio;
-}
-
-function changeLogo(){
-  const user=localStorage.getItem("loggedUser");
-  const file=logoInput.files[0];
-  if(!file) return alert("Logo seç");
-
-  const reader=new FileReader();
-  reader.onload=e=>{
-    localStorage.setItem("logo_"+user,e.target.result);
-    profileLogo.src=e.target.result;
-  };
-  reader.readAsDataURL(file);
-}
-
-function saveBio(){
-  const user=localStorage.getItem("loggedUser");
-  localStorage.setItem("bio_"+user,bioInput.value);
-  alert("Bio kaydedildi");
-}
-
-/* FOTO YÜKLE */
-function uploadPhoto(){
-  const user=localStorage.getItem("loggedUser");
-  const file=uploadInput.files[0];
-  if(!file) return alert("Dosya seç");
-
-  const reader=new FileReader();
-  reader.onload=e=>{
-    const img=new Image();
-    img.onload=function(){
-      const canvas=document.createElement("canvas");
-      const maxWidth=800;
-      const scale=Math.min(1,maxWidth/img.width);
-
-      canvas.width=img.width*scale;
-      canvas.height=img.height*scale;
-
-      canvas.getContext("2d").drawImage(img,0,0,canvas.width,canvas.height);
-      const compressed=canvas.toDataURL("image/jpeg",0.7);
-
-      savePendingPhoto(compressed,user);
-      alert("Admin onayına gönderildi");
-      loadMyPhotos();
+    const reader = new FileReader();
+    reader.onload = function(ev) {
+        document.getElementById("logoPreview").src = ev.target.result;
     };
-    img.src=e.target.result;
-  };
-  reader.readAsDataURL(file);
-}
+    reader.readAsDataURL(file);
+});
 
-function savePendingPhoto(src,user){
-  const pending=JSON.parse(localStorage.getItem("pendingPhotos")||"[]");
-  pending.push({id:Date.now(),src,user});
-  localStorage.setItem("pendingPhotos",JSON.stringify(pending));
-}
+// FOTOĞRAF YÜKLE
+document.getElementById("photoInput").addEventListener("change", function(e) {
+    const files = e.target.files;
 
-/* BENİM FOTO */
-function loadMyPhotos(){
-  const user=localStorage.getItem("loggedUser");
-  const pending=JSON.parse(localStorage.getItem("pendingPhotos")||"[]");
-  const mine=pending.filter(p=>p.user===user);
-
-  myPhotos.innerHTML="";
-
-  mine.forEach(photo=>{
-    const card=document.createElement("div");
-    card.className="card";
-
-    card.innerHTML=`
-      <img src="${photo.src}">
-      <button class="nav-btn" style="margin-top:8px;background:#ef4444;color:#fff;" onclick="deleteMyPhoto(${photo.id})">Sil</button>
-    `;
-    myPhotos.appendChild(card);
-  });
-}
-
-function deleteMyPhoto(id){
-  let pending=JSON.parse(localStorage.getItem("pendingPhotos")||"[]");
-  pending=pending.filter(p=>p.id!==id);
-  localStorage.setItem("pendingPhotos",JSON.stringify(pending));
-  loadMyPhotos();
-}
-
-/* GALERİ */
-function loadApprovedPhotos(){
-  const approved=JSON.parse(localStorage.getItem("approvedPhotos")||"[]");
-  gallery.innerHTML="";
-  approved.forEach(p=>{
-    const card=document.createElement("div");
-    card.className="card";
-    card.innerHTML=`<img src="${p.src}">`;
-    gallery.appendChild(card);
-  });
-}
-
-/* AUTH */
-let authMode="login";
-
-function showLogin(){authMode="login";authModal.style.display="flex";}
-function showRegister(){authMode="register";authModal.style.display="flex";}
-function closeAuth(){authModal.style.display="none";}
-
-function authAction(){
-  const user=authUser.value;
-  const pass=authPass.value;
-  if(!user||!pass) return alert("Boş bırakma");
-
-  if(authMode==="register"){
-    localStorage.setItem("user_"+user,pass);
-    alert("Kayıt başarılı");
-  }else{
-    if(localStorage.getItem("user_"+user)===pass){
-      localStorage.setItem("loggedUser",user);
-      updateNavbar();
-      closeAuth();
-      loadApprovedPhotos();
-    }else alert("Hatalı giriş");
-  }
-}
-
-function logout(){
-  localStorage.removeItem("loggedUser");
-  location.reload();
-}
-
-/* INIT */
-updateNavbar();
-loadApprovedPhotos();
+    for (let file of files) {
+        const reader = new FileReader();
+        reader.onload = function(ev) {
+            const img = document.createElement("img");
+            img.src = ev.target.result;
+            document.getElementById("gallery").appendChild(img);
+        };
+        reader.readAsDataURL(file);
+    }
+});
 </script>
 
 </body>
