@@ -139,11 +139,106 @@ footer{
   font-size:.85rem;
 }
 </style>
+  .container{
+  padding:20px;
+}
+
+.gallery{
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(220px,1fr));
+  gap:20px;
+  margin-top:20px;
+}
+
+.card{
+  background:#1a1a1a;
+  padding:12px;
+  border-radius:12px;
+  box-shadow:0 4px 12px rgba(0,0,0,0.4);
+}
+
+.card img{
+  width:100%;
+  border-radius:10px;
+}
+
+.actions{
+  display:flex;
+  justify-content:space-between;
+  margin-top:8px;
+}
+
+.like-btn{
+  background:#ff4081;
+  border:none;
+  color:white;
+  padding:6px 10px;
+  border-radius:6px;
+  cursor:pointer;
+}
+
+.comment-box{
+  width:100%;
+  margin-top:6px;
+  padding:6px;
+  border-radius:6px;
+  border:none;
+}
+
 </head>
 
 <body>
+<script>
+function uploadPhoto(){
+  const input = document.getElementById("uploadInput");
+  const file = input.files[0];
+  if(!file) return;
+
+  const reader = new FileReader();
+  reader.onload = function(e){
+    addToGallery(e.target.result);
+  };
+  reader.readAsDataURL(file);
+}
+
+function addToGallery(src){
+  const gallery = document.getElementById("gallery");
+
+  const card = document.createElement("div");
+  card.className = "card";
+
+  card.innerHTML = `
+    <img src="${src}">
+    <div class="actions">
+      <button class="like-btn" onclick="like(this)">❤️ 0</button>
+    </div>
+    <input class="comment-box" placeholder="Yorum yaz...">
+  `;
+
+  gallery.prepend(card);
+}
+
+function like(btn){
+  let count = parseInt(btn.innerText.split(" ")[1]);
+  count++;
+  btn.innerText = "❤️ " + count;
+}
+</script>
 
 <header class="navbar">
+  <div class="container">
+
+  <h2>Fotoğraf Yükle</h2>
+  <input type="file" id="uploadInput" accept="image/*">
+  <button onclick="uploadPhoto()">Yükle</button>
+
+  <hr>
+
+  <h2>Galeri</h2>
+  <div id="gallery" class="gallery"></div>
+
+</div>
+
   <div class="nav-left">
     <img src="logo.png" class="logo">
     <span class="brand">Aquaentra</span>
