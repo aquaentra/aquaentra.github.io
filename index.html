@@ -289,9 +289,10 @@ function renderPending(){
   pending.forEach(p=>{
     const card=document.createElement("div");
     card.className="card";
-    card.innerHTML=`
-      <img src="${p.src}">
-      <button class="nav-btn" style="margin-top:8px;" onclick="approvePhoto(${p.id})">Onayla</button>`;
+    card.innerHTML = `
+  <img src="${photo.src}">
+  <button class="nav-btn" style="margin-top:8px;" onclick="approvePhoto(${photo.id})">Onayla</button>
+  <button class="nav-btn" style="margin-top:6px;background:#ef4444;" onclick="rejectPhoto(${photo.id})">Reddet</button>`;
     area.appendChild(card);
   });
 }
@@ -311,6 +312,16 @@ function approvePhoto(id){
 
   renderPending();
   loadApprovedPhotos();
+}
+// ===== REDDET =====
+function rejectPhoto(id){
+  let pending = JSON.parse(localStorage.getItem("pendingPhotos") || "[]");
+
+  pending = pending.filter(p => p.id !== id);
+
+  localStorage.setItem("pendingPhotos", JSON.stringify(pending));
+
+  renderPending();
 }
 
 // ===== SAYFA AÇILIŞ =====
