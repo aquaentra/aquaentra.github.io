@@ -29,6 +29,48 @@ body{
   background:#0b1220;
   color:#e5e7eb;
 }
+.navbar{
+  position:sticky;
+  top:0;
+  background:#111;
+  color:white;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding:14px 24px;
+  box-shadow:0 2px 10px rgba(0,0,0,0.4);
+  z-index:999;
+}
+
+.nav-left{
+  display:flex;
+  align-items:center;
+  gap:10px;
+}
+
+.brand{
+  font-size:20px;
+  font-weight:bold;
+}
+
+.nav-right{
+  display:flex;
+  gap:10px;
+}
+
+.nav-btn{
+  background:#00bcd4;
+  border:none;
+  padding:8px 14px;
+  border-radius:8px;
+  cursor:pointer;
+  font-weight:600;
+  transition:0.2s;
+}
+
+.nav-btn:hover{
+  background:#0097a7;
+}
 
 /* HEADER */
 header{
@@ -101,41 +143,18 @@ footer{
 
 <body>
 
-<header>
-  <h1 class="logo-title">
-  <img src="logo.png" class="logo">
-  Aquaentra Gallery
-</h1>
-
-  <p></p>
-</header>
-
-<div class="container">
-  <div class="gallery">
-
-    <div class="card">
-      <img src="https://picsum.photos/600/400?random=1">
-      <div class="card-content">
-        <p>Fotoğraf açıklaması</p>
-      </div>
-    </div>
-
-    <div class="card">
-      <img src="https://picsum.photos/600/400?random=2">
-      <div class="card-content">
-        <p>Fotoğraf açıklaması</p>
-      </div>
-    </div>
-
-    <div class="card">
-      <img src="https://picsum.photos/600/400?random=3">
-      <div class="card-content">
-        <p>Fotoğraf açıklaması</p>
-      </div>
-    </div>
-
+<header class="navbar">
+  <div class="nav-left">
+    <img src="logo.png" class="logo">
+    <span class="brand">Aquaentra</span>
   </div>
-</div>
+
+  <div class="nav-right">
+    <button class="nav-btn">Galeri</button>
+    <button class="nav-btn">Yükle</button>
+    <button class="nav-btn">Giriş</button>
+  </div>
+</header>
 
 <footer>
   © Aquaentra
