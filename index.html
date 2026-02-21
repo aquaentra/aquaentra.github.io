@@ -132,57 +132,42 @@ footer{
 </div>
 
 <script>
-  console.log("JS çalıştı");
-  
+console.log("JS çalıştı");
+
 // ===== AYAR =====
 const ADMIN_USER = "admin";
 
 // ===== FOTO YÜKLE =====
 function uploadPhoto(){
-  console.log("upload tıklandı");
-
   const user = localStorage.getItem("loggedUser");
-  console.log("user:", user);
-
-  if(!user){
-    alert("Önce giriş yap");
-    return;
-  }
+  if(!user) return alert("Önce giriş yap");
 
   const input = document.getElementById("uploadInput");
   const file = input.files[0];
-
-  if(!file){
-    alert("Önce dosya seç");
-    return;
-  }
+  if(!file) return alert("Önce dosya seç");
 
   const reader = new FileReader();
-reader.onload = function(e){
+  reader.onload = function(e){
+    const img = new Image();
+    img.onload = function(){
+      const canvas = document.createElement("canvas");
+      const maxWidth = 800;
+      const scale = maxWidth / img.width;
 
-  // 🔥 RESMİ KÜÇÜLT
-  const img = new Image();
-  img.onload = function(){
-    const canvas = document.createElement("canvas");
+      canvas.width = maxWidth;
+      canvas.height = img.height * scale;
 
-    const maxWidth = 800;
-    const scale = maxWidth / img.width;
+      const ctx = canvas.getContext("2d");
+      ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
 
-    canvas.width = maxWidth;
-    canvas.height = img.height * scale;
+      const compressed = canvas.toDataURL("image/jpeg", 0.7);
 
-    const ctx = canvas.getContext("2d");
-    ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-
-    const compressed = canvas.toDataURL("image/jpeg", 0.7);
-
-    savePendingPhoto(compressed, user);
-    alert("Foto admin onayına gönderildi");
+      savePendingPhoto(compressed, user);
+      alert("Foto admin onayına gönderildi");
+    };
+    img.src = e.target.result;
   };
-
-  img.src = e.target.result;
-};
-reader.readAsDataURL(file);
+  reader.readAsDataURL(file);
 }
 
 function savePendingPhoto(src,user){
@@ -217,21 +202,23 @@ let authMode="login";
 
 function showLogin(){
   authMode="login";
-  authTitle.innerText="Giriş";
-  authModal.style.display="flex";
+  document.getElementById("authTitle").innerText="Giriş";
+  document.getElementById("authModal").style.display="flex";
 }
 
 function showRegister(){
   authMode="register";
-  authTitle.innerText="Kayıt";
-  authModal.style.display="flex";
+  document.getElementById("authTitle").innerText="Kayıt";
+  document.getElementById("authModal").style.display="flex";
 }
 
-function closeAuth(){ authModal.style.display="none"; }
+function closeAuth(){
+  document.getElementById("authModal").style.display="none";
+}
 
 function authAction(){
-  const user=authUser.value;
-  const pass=authPass.value;
+  const user=document.getElementById("authUser").value;
+  const pass=document.getElementById("authPass").value;
   if(!user||!pass) return alert("Boş bırakma");
 
   if(authMode==="register"){
@@ -258,12 +245,15 @@ function updateNavbar(){
   }
 }
 
-function logout(){ localStorage.removeItem("loggedUser"); location.reload(); }
+function logout(){
+  localStorage.removeItem("loggedUser");
+  location.reload();
+}
 
 // ===== ONAYLANANLAR =====
 function loadApprovedPhotos(){
   const approved=JSON.parse(localStorage.getItem("approvedPhotos")||"[]");
-  gallery.innerHTML="";
+  document.getElementById("gallery").innerHTML="";
   approved.forEach(addToGallery);
 }
 
@@ -277,6 +267,7 @@ function loadAdminPanel(){
     <h2 style="margin-top:40px;">🛡️ Admin Onay Paneli</h2>
     <div id="adminPending" class="gallery"></div>`;
   document.querySelector(".container").appendChild(panel);
+
   renderPending();
 }
 
@@ -284,15 +275,19 @@ function renderPending(){
   const pending=JSON.parse(localStorage.getItem("pendingPhotos")||"[]");
   const area=document.getElementById("adminPending");
   if(!area) return;
+
   area.innerHTML="";
 
   pending.forEach(p=>{
     const card=document.createElement("div");
     card.className="card";
-    card.innerHTML = `
-  <img src="${photo.src}">
-  <button class="nav-btn" style="margin-top:8px;" onclick="approvePhoto(${photo.id})">Onayla</button>
-  <button class="nav-btn" style="margin-top:6px;background:#ef4444;" onclick="rejectPhoto(${photo.id})">Reddet</button>`;
+
+    card.innerHTML=`
+      <img src="${p.src}">
+      <button class="nav-btn" style="margin-top:8px;" onclick="approvePhoto(${p.id})">Onayla</button>
+      <button class="nav-btn" style="margin-top:6px;background:#ef4444;" onclick="rejectPhoto(${p.id})">Reddet</button>
+    `;
+
     area.appendChild(card);
   });
 }
@@ -304,7 +299,7 @@ function approvePhoto(id){
   const photo=pending.find(p=>p.id===id);
   if(!photo) return;
 
-  approved.push(photo);
+  approved.unshift(photo);
   pending=pending.filter(p=>p.id!==id);
 
   localStorage.setItem("pendingPhotos",JSON.stringify(pending));
@@ -313,23 +308,19 @@ function approvePhoto(id){
   renderPending();
   loadApprovedPhotos();
 }
-// ===== REDDET =====
+
 function rejectPhoto(id){
-  let pending = JSON.parse(localStorage.getItem("pendingPhotos") || "[]");
-
-  pending = pending.filter(p => p.id !== id);
-
-  localStorage.setItem("pendingPhotos", JSON.stringify(pending));
-
+  let pending=JSON.parse(localStorage.getItem("pendingPhotos")||"[]");
+  pending=pending.filter(p=>p.id!==id);
+  localStorage.setItem("pendingPhotos",JSON.stringify(pending));
   renderPending();
 }
 
 // ===== SAYFA AÇILIŞ =====
+document.getElementById("uploadBtn").addEventListener("click", uploadPhoto);
 updateNavbar();
 loadApprovedPhotos();
 loadAdminPanel();
-  // upload butonunu bağla
-document.getElementById("uploadBtn").addEventListener("click", uploadPhoto);
 </script>
 
 </body>
