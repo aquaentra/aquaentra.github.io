@@ -3,18 +3,15 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<h1 class="logo-title">
-  <img src="logo.png" class="logo">
-  Aquaentra Gallery
-</h1>
-
+<title>Aquaentra Gallery</title>
 
 <style>
 *{
   box-sizing:border-box;
   margin:0;
   padding:0;
-  .logo-title{
+}
+.logo-title{
   display:flex;
   align-items:center;
   justify-content:center;
@@ -25,8 +22,6 @@
   width:42px;
   height:42px;
   object-fit:contain;
-}
-
 }
 
 body{
@@ -107,19 +102,43 @@ footer{
 <body>
 
 <header>
- 
-  <p></p>
-</header>
-<h1 class="logo-title">
+  <h1 class="logo-title">
   <img src="logo.png" class="logo">
   Aquaentra Gallery
 </h1>
 
+  <p></p>
+</header>
 
+<div class="container">
+  <div class="gallery">
 
+    <div class="card">
+      <img src="https://picsum.photos/600/400?random=1">
+      <div class="card-content">
+        <p>Fotoğraf açıklaması</p>
+      </div>
+    </div>
+
+    <div class="card">
+      <img src="https://picsum.photos/600/400?random=2">
+      <div class="card-content">
+        <p>Fotoğraf açıklaması</p>
+      </div>
+    </div>
+
+    <div class="card">
+      <img src="https://picsum.photos/600/400?random=3">
+      <div class="card-content">
+        <p>Fotoğraf açıklaması</p>
+      </div>
+    </div>
+
+  </div>
+</div>
 
 <footer>
-  © AQUAENTRA
+  © Aquaentra
 </footer>
 
 </body>
