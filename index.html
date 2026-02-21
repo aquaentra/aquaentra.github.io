@@ -139,14 +139,26 @@ const ADMIN_USER = "admin";
 
 // ===== FOTO YÜKLE =====
 function uploadPhoto(){
-  const user = localStorage.getItem("loggedUser");
-  if(!user){ alert("Önce giriş yap"); return; }
+  console.log("upload tıklandı");
 
-  const file = document.getElementById("uploadInput").files[0];
-  if(!file) return;
+  const user = localStorage.getItem("loggedUser");
+  console.log("user:", user);
+
+  if(!user){
+    alert("Önce giriş yap");
+    return;
+  }
+
+  const input = document.getElementById("uploadInput");
+  const file = input.files[0];
+
+  if(!file){
+    alert("Önce dosya seç");
+    return;
+  }
 
   const reader = new FileReader();
-  reader.onload = e => {
+  reader.onload = function(e){
     savePendingPhoto(e.target.result, user);
     alert("Foto admin onayına gönderildi");
   };
