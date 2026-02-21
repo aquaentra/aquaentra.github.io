@@ -6,14 +6,10 @@
 <title>Aquaentra Gallery</title>
 
 <style>
-*{
-  box-sizing:border-box;
-  margin:0;
-  padding:0;
-}
+*{box-sizing:border-box;margin:0;padding:0;}
 
 body{
-  font-family: system-ui, Arial;
+  font-family:system-ui,Arial;
   background:#0b1220;
   color:#e5e7eb;
 }
@@ -32,25 +28,11 @@ body{
   z-index:999;
 }
 
-.nav-left{
-  display:flex;
-  align-items:center;
-  gap:10px;
-}
+.nav-left{display:flex;align-items:center;gap:10px;}
+.logo{width:42px;}
+.brand{font-size:20px;font-weight:bold;}
 
-.logo{
-  width:42px;
-}
-
-.brand{
-  font-size:20px;
-  font-weight:bold;
-}
-
-.nav-right{
-  display:flex;
-  gap:10px;
-}
+.nav-right{display:flex;gap:10px;}
 
 .nav-btn{
   background:#00bcd4;
@@ -62,11 +44,7 @@ body{
 }
 
 /* CONTAINER */
-.container{
-  max-width:1200px;
-  margin:auto;
-  padding:40px 20px;
-}
+.container{max-width:1200px;margin:auto;padding:40px 20px;}
 
 /* GALLERY */
 .gallery{
@@ -76,16 +54,8 @@ body{
   margin-top:20px;
 }
 
-.card{
-  background:#1a1a1a;
-  padding:12px;
-  border-radius:12px;
-}
-
-.card img{
-  width:100%;
-  border-radius:10px;
-}
+.card{background:#1a1a1a;padding:12px;border-radius:12px;}
+.card img{width:100%;border-radius:10px;}
 
 .actions{
   display:flex;
@@ -136,7 +106,6 @@ footer{
 
 <!-- ANA İÇERİK -->
 <div class="container">
-
   <h2>Fotoğraf Yükle</h2>
   <input type="file" id="uploadInput" accept="image/*">
   <button onclick="uploadPhoto()">Yükle</button>
@@ -145,16 +114,13 @@ footer{
 
   <h2>Galeri</h2>
   <div id="gallery" class="gallery"></div>
-
 </div>
 
-<footer>
-  © Aquaentra
-</footer>
+<footer>© Aquaentra</footer>
 
 <!-- AUTH MODAL -->
-<div id="authModal" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,.6); align-items:center; justify-content:center; z-index:2000;">
-  <div style="background:#111; padding:24px; border-radius:12px; width:300px;">
+<div id="authModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.6);align-items:center;justify-content:center;z-index:2000;">
+  <div style="background:#111;padding:24px;border-radius:12px;width:300px;">
     <h3 id="authTitle">Giriş</h3>
 
     <input id="authUser" placeholder="Kullanıcı adı" style="width:100%;margin-top:10px;padding:8px;border-radius:6px;border:none;">
@@ -166,186 +132,148 @@ footer{
 </div>
 
 <script>
-<script>
 // ===== AYAR =====
-const ADMIN_USER = "admin"; // admin kullanıcı adı
+const ADMIN_USER = "admin";
 
 // ===== FOTO YÜKLE =====
 function uploadPhoto(){
   const user = localStorage.getItem("loggedUser");
-  if(!user){
-    alert("Önce giriş yap");
-    return;
-  }
+  if(!user){ alert("Önce giriş yap"); return; }
 
-  const input = document.getElementById("uploadInput");
-  const file = input.files[0];
+  const file = document.getElementById("uploadInput").files[0];
   if(!file) return;
 
   const reader = new FileReader();
-  reader.onload = function(e){
+  reader.onload = e => {
     savePendingPhoto(e.target.result, user);
     alert("Foto admin onayına gönderildi");
   };
   reader.readAsDataURL(file);
 }
 
-// ===== BEKLEYENLERE KAYDET =====
-function savePendingPhoto(src, user){
-  const pending = JSON.parse(localStorage.getItem("pendingPhotos") || "[]");
-
-  pending.push({
-    id: Date.now(),
-    src: src,
-    user: user,
-    likes: 0
-  });
-
-  localStorage.setItem("pendingPhotos", JSON.stringify(pending));
+function savePendingPhoto(src,user){
+  const pending = JSON.parse(localStorage.getItem("pendingPhotos")||"[]");
+  pending.push({id:Date.now(),src,user,likes:0});
+  localStorage.setItem("pendingPhotos",JSON.stringify(pending));
 }
 
-// ===== GALERİYE EKLE =====
+// ===== GALERİ =====
 function addToGallery(photo){
-  const gallery = document.getElementById("gallery");
+  const gallery=document.getElementById("gallery");
+  const card=document.createElement("div");
+  card.className="card";
 
-  const card = document.createElement("div");
-  card.className = "card";
-
-  card.innerHTML = `
+  card.innerHTML=`
     <img src="${photo.src}">
     <div class="actions">
       <button class="like-btn" onclick="like(this)">❤️ ${photo.likes}</button>
     </div>
     <input class="comment-box" placeholder="Yorum yaz...">
   `;
-
   gallery.prepend(card);
 }
 
-// ===== LIKE =====
 function like(btn){
-  let count = parseInt(btn.innerText.split(" ")[1]);
-  count++;
-  btn.innerText = "❤️ " + count;
+  let count=parseInt(btn.innerText.split(" ")[1]);
+  btn.innerText="❤️ "+(++count);
 }
 
 // ===== AUTH =====
-let authMode = "login";
+let authMode="login";
 
 function showLogin(){
-  authMode = "login";
-  document.getElementById("authTitle").innerText = "Giriş";
-  document.getElementById("authModal").style.display = "flex";
+  authMode="login";
+  authTitle.innerText="Giriş";
+  authModal.style.display="flex";
 }
 
 function showRegister(){
-  authMode = "register";
-  document.getElementById("authTitle").innerText = "Kayıt";
-  document.getElementById("authModal").style.display = "flex";
+  authMode="register";
+  authTitle.innerText="Kayıt";
+  authModal.style.display="flex";
 }
 
-function closeAuth(){
-  document.getElementById("authModal").style.display = "none";
-}
+function closeAuth(){ authModal.style.display="none"; }
 
 function authAction(){
-  const user = document.getElementById("authUser").value;
-  const pass = document.getElementById("authPass").value;
+  const user=authUser.value;
+  const pass=authPass.value;
+  if(!user||!pass) return alert("Boş bırakma");
 
-  if(!user || !pass) return alert("Boş bırakma");
-
-  if(authMode === "register"){
-    localStorage.setItem("user_"+user, pass);
+  if(authMode==="register"){
+    localStorage.setItem("user_"+user,pass);
     alert("Kayıt başarılı");
   }else{
-    const saved = localStorage.getItem("user_"+user);
-    if(saved === pass){
-      localStorage.setItem("loggedUser", user);
+    const saved=localStorage.getItem("user_"+user);
+    if(saved===pass){
+      localStorage.setItem("loggedUser",user);
       updateNavbar();
       closeAuth();
       loadApprovedPhotos();
       loadAdminPanel();
-    }else{
-      alert("Hatalı giriş");
-    }
+    }else alert("Hatalı giriş");
   }
 }
 
 function updateNavbar(){
-  const user = localStorage.getItem("loggedUser");
-  const area = document.getElementById("navUserArea");
-
+  const user=localStorage.getItem("loggedUser");
+  const area=document.getElementById("navUserArea");
   if(user){
-    area.innerHTML = `
-      <span style="margin-right:10px;">👤 ${user}</span>
-      <button class="nav-btn" onclick="logout()">Çıkış</button>
-    `;
+    area.innerHTML=`👤 ${user}
+      <button class="nav-btn" onclick="logout()">Çıkış</button>`;
   }
 }
 
-function logout(){
-  localStorage.removeItem("loggedUser");
-  location.reload();
-}
+function logout(){ localStorage.removeItem("loggedUser"); location.reload(); }
 
-// ===== ONAYLANANLARI YÜKLE =====
+// ===== ONAYLANANLAR =====
 function loadApprovedPhotos(){
-  const approved = JSON.parse(localStorage.getItem("approvedPhotos") || "[]");
-  document.getElementById("gallery").innerHTML = "";
+  const approved=JSON.parse(localStorage.getItem("approvedPhotos")||"[]");
+  gallery.innerHTML="";
   approved.forEach(addToGallery);
 }
 
-// ===== ADMIN PANEL =====
+// ===== ADMIN =====
 function loadAdminPanel(){
-  const user = localStorage.getItem("loggedUser");
-  if(user !== ADMIN_USER) return;
+  const user=localStorage.getItem("loggedUser");
+  if(user!==ADMIN_USER) return;
 
-  const container = document.querySelector(".container");
-
-  const panel = document.createElement("div");
-  panel.innerHTML = `
+  const panel=document.createElement("div");
+  panel.innerHTML=`
     <h2 style="margin-top:40px;">🛡️ Admin Onay Paneli</h2>
-    <div id="adminPending" class="gallery"></div>
-  `;
-
-  container.appendChild(panel);
-
+    <div id="adminPending" class="gallery"></div>`;
+  document.querySelector(".container").appendChild(panel);
   renderPending();
 }
 
 function renderPending(){
-  const pending = JSON.parse(localStorage.getItem("pendingPhotos") || "[]");
-  const area = document.getElementById("adminPending");
+  const pending=JSON.parse(localStorage.getItem("pendingPhotos")||"[]");
+  const area=document.getElementById("adminPending");
   if(!area) return;
+  area.innerHTML="";
 
-  area.innerHTML = "";
-
-  pending.forEach(photo=>{
-    const card = document.createElement("div");
-    card.className = "card";
-
-    card.innerHTML = `
-      <img src="${photo.src}">
-      <button class="nav-btn" style="margin-top:8px;" onclick="approvePhoto(${photo.id})">Onayla</button>
-    `;
-
+  pending.forEach(p=>{
+    const card=document.createElement("div");
+    card.className="card";
+    card.innerHTML=`
+      <img src="${p.src}">
+      <button class="nav-btn" style="margin-top:8px;" onclick="approvePhoto(${p.id})">Onayla</button>`;
     area.appendChild(card);
   });
 }
 
-// ===== ONAYLA =====
 function approvePhoto(id){
-  let pending = JSON.parse(localStorage.getItem("pendingPhotos") || "[]");
-  let approved = JSON.parse(localStorage.getItem("approvedPhotos") || "[]");
+  let pending=JSON.parse(localStorage.getItem("pendingPhotos")||"[]");
+  let approved=JSON.parse(localStorage.getItem("approvedPhotos")||"[]");
 
-  const photo = pending.find(p => p.id === id);
+  const photo=pending.find(p=>p.id===id);
   if(!photo) return;
 
   approved.push(photo);
-  pending = pending.filter(p => p.id !== id);
+  pending=pending.filter(p=>p.id!==id);
 
-  localStorage.setItem("pendingPhotos", JSON.stringify(pending));
-  localStorage.setItem("approvedPhotos", JSON.stringify(approved));
+  localStorage.setItem("pendingPhotos",JSON.stringify(pending));
+  localStorage.setItem("approvedPhotos",JSON.stringify(approved));
 
   renderPending();
   loadApprovedPhotos();
@@ -355,8 +283,6 @@ function approvePhoto(id){
 updateNavbar();
 loadApprovedPhotos();
 loadAdminPanel();
-</script>
-
 </script>
 
 </body>
