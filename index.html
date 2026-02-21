@@ -108,7 +108,7 @@ footer{
 <div class="container">
   <h2>Fotoğraf Yükle</h2>
   <input type="file" id="uploadInput" accept="image/*">
-  <button class="nav-btn" onclick="uploadPhoto()">Yükle</button>
+  <button class="nav-btn" id="uploadBtn">Yükle</button>
 
   <hr style="margin:20px 0;">
 
@@ -285,6 +285,8 @@ function approvePhoto(id){
 updateNavbar();
 loadApprovedPhotos();
 loadAdminPanel();
+  // upload butonunu bağla
+document.getElementById("uploadBtn").addEventListener("click", uploadPhoto);
 </script>
 
 </body>
