@@ -20,32 +20,38 @@ body{
   top:0;
   background:#111;
   color:white;
-  padding:18px 24px 12px;
+  padding:8px 24px 10px;
   box-shadow:0 2px 10px rgba(0,0,0,0.4);
   z-index:999;
+  text-align:center;
 }
 
-.nav-top{
-  display:flex;
-  justify-content:flex-end;
-}
-
+/* ORTA LOGO */
 .nav-center{
   display:flex;
   justify-content:center;
   align-items:center;
   gap:14px;
-  margin-top:6px;
 }
 
-.logo{width:60px;}
+.logo{
+  width:56px;
+}
 
 .brand{
-  font-size:28px;
-  font-weight:bold;
+  font-size:26px;
+  font-weight:700;
 }
 
-.nav-right{display:flex;gap:10px;}
+/* SAĞ ÜST USER */
+.nav-right{
+  position:absolute;
+  right:24px;
+  top:50%;
+  transform:translateY(-50%);
+  display:flex;
+  gap:10px;
+}
 
 .nav-btn{
   background:#00bcd4;
@@ -54,10 +60,15 @@ body{
   border-radius:8px;
   cursor:pointer;
   font-weight:600;
+  color:#000;
 }
 
 /* CONTAINER */
-.container{max-width:1200px;margin:auto;padding:40px 20px;}
+.container{
+  max-width:1200px;
+  margin:auto;
+  padding:40px 20px;
+}
 
 /* GALLERY */
 .gallery{
@@ -79,8 +90,6 @@ body{
 }
 
 .actions{
-  display:flex;
-  justify-content:space-between;
   margin-top:8px;
 }
 
@@ -115,22 +124,21 @@ footer{
 <!-- NAVBAR -->
 <header class="navbar">
 
-  <div class="nav-top">
-    <div class="nav-right" id="navUserArea">
-      <button class="nav-btn" onclick="showLogin()">Giriş</button>
-      <button class="nav-btn" onclick="showRegister()">Kayıt</button>
-    </div>
-  </div>
-
   <div class="nav-center">
     <img src="logo.png" class="logo">
     <span class="brand">Aquaentra Gallery</span>
   </div>
 
+  <div class="nav-right" id="navUserArea">
+    <button class="nav-btn" onclick="showLogin()">Giriş</button>
+    <button class="nav-btn" onclick="showRegister()">Kayıt</button>
+  </div>
+
 </header>
 
-<!-- ANA İÇERİK -->
+<!-- ANA -->
 <div class="container">
+
   <h2>Fotoğraf Yükle</h2>
   <input type="file" id="uploadInput" accept="image/*">
   <button class="nav-btn" id="uploadBtn">Yükle</button>
@@ -139,6 +147,7 @@ footer{
 
   <h2>Galeri</h2>
   <div id="gallery" class="gallery"></div>
+
 </div>
 
 <footer>© Aquaentra</footer>
@@ -152,13 +161,11 @@ footer{
     <input id="authPass" type="password" placeholder="Şifre" style="width:100%;margin-top:10px;padding:8px;border-radius:6px;border:none;">
 
     <button class="nav-btn" style="width:100%;margin-top:12px;" onclick="authAction()">Devam</button>
-    <button class="nav-btn" style="width:100%;margin-top:6px;background:#444;" onclick="closeAuth()">Kapat</button>
+    <button class="nav-btn" style="width:100%;margin-top:6px;background:#444;color:#fff;" onclick="closeAuth()">Kapat</button>
   </div>
 </div>
 
 <script>
-console.log("JS çalıştı");
-
 // ===== AYAR =====
 const ADMIN_USER = "admin";
 
@@ -167,14 +174,14 @@ function uploadPhoto(){
   const user = localStorage.getItem("loggedUser");
   if(!user) return alert("Önce giriş yap");
 
-  const input = document.getElementById("uploadInput");
-  const file = input.files[0];
+  const file = uploadInput.files[0];
   if(!file) return alert("Önce dosya seç");
 
   const reader = new FileReader();
-  reader.onload = function(e){
 
+  reader.onload = function(e){
     const img = new Image();
+
     img.onload = function(){
       const canvas = document.createElement("canvas");
 
@@ -188,7 +195,6 @@ function uploadPhoto(){
       ctx.drawImage(img,0,0,canvas.width,canvas.height);
 
       const compressed = canvas.toDataURL("image/jpeg",0.7);
-
       savePendingPhoto(compressed,user);
       alert("Foto admin onayına gönderildi");
     };
@@ -207,7 +213,6 @@ function savePendingPhoto(src,user){
 
 // ===== GALERİ =====
 function addToGallery(photo){
-  const gallery=document.getElementById("gallery");
   const card=document.createElement("div");
   card.className="card";
 
@@ -218,6 +223,7 @@ function addToGallery(photo){
     </div>
     <input class="comment-box" placeholder="Yorum yaz...">
   `;
+
   gallery.prepend(card);
 }
 
@@ -267,10 +273,11 @@ function authAction(){
 
 function updateNavbar(){
   const user=localStorage.getItem("loggedUser");
-  const area=document.getElementById("navUserArea");
   if(user){
-    area.innerHTML=`👤 ${user}
-      <button class="nav-btn" onclick="logout()">Çıkış</button>`;
+    navUserArea.innerHTML=`
+      <span style="margin-right:8px;">👤 ${user}</span>
+      <button class="nav-btn" onclick="logout()">Çıkış</button>
+    `;
   }
 }
 
@@ -282,7 +289,7 @@ function logout(){
 // ===== ONAYLANANLAR =====
 function loadApprovedPhotos(){
   const approved=JSON.parse(localStorage.getItem("approvedPhotos")||"[]");
-  document.getElementById("gallery").innerHTML="";
+  gallery.innerHTML="";
   approved.forEach(addToGallery);
 }
 
@@ -294,9 +301,9 @@ function loadAdminPanel(){
   const panel=document.createElement("div");
   panel.innerHTML=`
     <h2 style="margin-top:40px;">🛡️ Admin Onay Paneli</h2>
-    <div id="adminPending" class="gallery"></div>`;
+    <div id="adminPending" class="gallery"></div>
+  `;
   document.querySelector(".container").appendChild(panel);
-
   renderPending();
 }
 
@@ -304,15 +311,19 @@ function renderPending(){
   const pending=JSON.parse(localStorage.getItem("pendingPhotos")||"[]");
   const area=document.getElementById("adminPending");
   if(!area) return;
+
   area.innerHTML="";
 
   pending.forEach(photo=>{
     const card=document.createElement("div");
     card.className="card";
+
     card.innerHTML=`
       <img src="${photo.src}">
       <button class="nav-btn" style="margin-top:8px;" onclick="approvePhoto(${photo.id})">Onayla</button>
-      <button class="nav-btn" style="margin-top:6px;background:#ef4444;" onclick="rejectPhoto(${photo.id})">Reddet</button>`;
+      <button class="nav-btn" style="margin-top:6px;background:#ef4444;color:#fff;" onclick="rejectPhoto(${photo.id})">Reddet</button>
+    `;
+
     area.appendChild(card);
   });
 }
@@ -341,12 +352,11 @@ function rejectPhoto(id){
   renderPending();
 }
 
-// ===== SAYFA AÇILIŞ =====
+// ===== INIT =====
+uploadBtn.addEventListener("click",uploadPhoto);
 updateNavbar();
 loadApprovedPhotos();
 loadAdminPanel();
-
-document.getElementById("uploadBtn").addEventListener("click",uploadPhoto);
 </script>
 
 </body>
