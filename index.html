@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Komutan Fotoğraf Galerisi</title>
+  <meta name="description" content="Akvaryum ve doğa fotoğraflarım" />
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, Helvetica, sans-serif;
+      background: #0f172a;
+      color: #e5e7eb;
+    }
+
+    header {
+      text-align: center;
+      padding: 40px 20px;
+      background: linear-gradient(135deg, #0ea5e9, #22c55e);
+      color: white;
+    }
+
+    header h1 {
+      margin: 0;
+      font-size: 2.2rem;
+    }
+
+    header p {
+      margin-top: 10px;
+      opacity: 0.9;
+    }
+
+    .gallery {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 16px;
+      padding: 20px;
+      max-width: 1200px;
+      margin: auto;
+    }
+
+    .card {
+      background: #111827;
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.4);
+      transition: transform 0.25s ease;
+    }
+
+    .card:hover {
+      transform: scale(1.03);
+    }
+
+    .card img {
+      width: 100%;
+      height: 220px;
+      object-fit: cover;
+      display: block;
+    }
+
+    .card p {
+      padding: 12px;
+      margin: 0;
+      font-size: 0.9rem;
+      text-align: center;
+    }
+
+    footer {
+      text-align: center;
+      padding: 30px 10px;
+      opacity: 0.7;
+      font-size: 0.85rem;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>📸 Komutan Galeri</h1>
+    <p>Akvaryum ve su altı fotoğraflarım</p>
+  </header>
+
+  <section class="gallery">
+
+    <div class="card">
+      <img src="https://picsum.photos/600/400?random=1" alt="Akvaryum fotoğrafı" />
+      <p>Fotoğraf açıklaması</p>
+    </div>
+
+    <div class="card">
+      <img src="https://picsum.photos/600/400?random=2" alt="Deniz canlısı" />
+      <p>Fotoğraf açıklaması</p>
+    </div>
+
+    <div class="card">
+      <img src="https://picsum.photos/600/400?random=3" alt="Resif akvaryumu" />
+      <p>Fotoğraf açıklaması</p>
+    </div>
+
+  </section>
+
+  <footer>
+    © 2026 Komutan Fotoğraf Galerisi
+  </footer>
+
+</body>
+</html>
